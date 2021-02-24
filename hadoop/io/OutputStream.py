@@ -117,7 +117,7 @@ class ByteArrayOutputStream(OutputStream):
         return self._count
 
     def toByteArray(self):
-        return ''.join(self._buffer)
+        return b''.join(self._buffer)
 
     def reset(self):
         self._buffer = []

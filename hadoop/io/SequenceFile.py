@@ -42,7 +42,7 @@ BLOCK_COMPRESS_VERSION  = '\x04'
 CUSTOM_COMPRESS_VERSION = '\x05'
 VERSION_WITH_METADATA   = '\x06'
 VERSION_PREFIX = 'SEQ'
-VERSION = VERSION_PREFIX + VERSION_WITH_METADATA
+VERSION = (VERSION_PREFIX + VERSION_WITH_METADATA).encode("utf-8")
 
 SYNC_ESCAPE = -1
 SYNC_HASH_SIZE = 16
@@ -88,7 +88,7 @@ class Metadata(Writable):
 
     def write(self, data_output):
         data_output.writeInt(len(self._meta))
-        for key, value in self._meta.iteritems():
+        for key, value in self._meta.items():
             Text.writeString(data_output, key)
             Text.writeString(data_output, value)
 
@@ -150,7 +150,7 @@ class Writer(object):
         self._stream = DataOutputStream(FileOutputStream(path))
 
         # sync is 16 random bytes
-        self._sync = md5('%s@%d' % (uuid1().bytes, int(time() * 1000))).digest()
+        self._sync = md5(('%s@%d' % (uuid1().bytes, int(time() * 1000))).encode("utf-8")).digest()
 
         self._writeFileHeader()
 
