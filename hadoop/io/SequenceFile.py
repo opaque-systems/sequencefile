@@ -150,7 +150,7 @@ class Writer(object):
         self._stream = DataOutputStream(FileOutputStream(path))
 
         # sync is 16 random bytes
-        self._sync = md5(('%s@%d' % (uuid1().bytes, int(time() * 1000))).encode()).digest()
+        self._sync = md5(('%s@%d' % (uuid1().bytes, int(time() * 1000))).encode("utf-8")).digest()
 
         self._writeFileHeader()
 
