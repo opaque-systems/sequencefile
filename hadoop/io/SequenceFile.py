@@ -97,7 +97,6 @@ class Metadata(Writable):
         if count < 0:
             raise IOError("Invalid size: %d for file metadata object" % count)
 
-        #  for i in xrange(count):
         for i in range(count):
             key = Text.readString(data_input)
             value = Text.readString(data_input)
@@ -453,7 +452,7 @@ class Reader(object):
 
         # Parse Header
         version_block = self._stream.read(len(VERSION))
-        
+
         if not version_block.startswith(VERSION_PREFIX.encode()):
             raise VersionPrefixException(VERSION_PREFIX,
                                          version_block[0:len(VERSION_PREFIX)])
@@ -489,7 +488,6 @@ class Reader(object):
                 self._codec = CodecPool().getDecompressor()
 
         self._metadata = Metadata()
-        #  if self._version >= VERSION_WITH_METADATA:
         if self._version.to_bytes(1, byteorder="little") >= VERSION_WITH_METADATA.encode():
             self._metadata.readFields(self._stream)
 

@@ -32,5 +32,4 @@ class BytesWritable(AbstractValueWritable):
 
     def toBytes(self):
         return bytes([x % 256 for x in self._value])
-        #  return b''.join(bytes(x % 256) for x in self._value)
 
