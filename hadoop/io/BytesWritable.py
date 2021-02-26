@@ -29,3 +29,7 @@ class BytesWritable(AbstractValueWritable):
 
     def toString(self):
         return ''.join(chr(x % 256) for x in self._value)
+
+    def toBytes(self):
+        return bytes([x % 256 for x in self._value])
+
