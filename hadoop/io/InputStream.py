@@ -105,7 +105,7 @@ class FileInputStream(InputStream):
             data_length = len(data)
             byte_buffer.append(data)
             length -= data_length
-        return ''.join(byte_buffer)
+        return b''.join(byte_buffer)
 
     def skip(self, n):
         skip_length = 0
@@ -144,7 +144,7 @@ class DataInputStream(InputStream):
         return struct.unpack(">b", data)[0]
 
     def readFully(self, length):
-        return [self.readByte() for _ in xrange(length)]
+        return [self.readByte() for _ in range(length)]
 
     def readUByte(self):
         data = self._stream.read(1)

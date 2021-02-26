@@ -97,7 +97,8 @@ class Metadata(Writable):
         if count < 0:
             raise IOError("Invalid size: %d for file metadata object" % count)
 
-        for i in xrange(count):
+        #  for i in xrange(count):
+        for i in range(count):
             key = Text.readString(data_input)
             value = Text.readString(data_input)
             self._meta[key] = value
@@ -150,7 +151,7 @@ class Writer(object):
         self._stream = DataOutputStream(FileOutputStream(path))
 
         # sync is 16 random bytes
-        self._sync = md5(('%s@%d' % (uuid1().bytes, int(time() * 1000))).encode("utf-8")).digest()
+        self._sync = md5(('%s@%d' % (uuid1().bytes, int(time() * 1000))).encode()).digest()
 
         self._writeFileHeader()
 
@@ -452,8 +453,8 @@ class Reader(object):
 
         # Parse Header
         version_block = self._stream.read(len(VERSION))
-
-        if not version_block.startswith(VERSION_PREFIX):
+        
+        if not version_block.startswith(VERSION_PREFIX.encode()):
             raise VersionPrefixException(VERSION_PREFIX,
                                          version_block[0:len(VERSION_PREFIX)])
 
@@ -462,19 +463,19 @@ class Reader(object):
             raise VersionMismatchException(VERSION[len(VERSION_PREFIX)],
                                            self._version)
 
-        if self._version < BLOCK_COMPRESS_VERSION:
+        if self._version.to_bytes(1, byteorder="little") < BLOCK_COMPRESS_VERSION.encode():
             # Same as below, but with UTF8 Deprecated Class
             raise NotImplementedError
         else:
             self._key_class_name = Text.readString(self._stream)
             self._value_class_name = Text.readString(self._stream)
 
-        if ord(self._version) > 2:
+        if self._version > 2:
             self._decompress = self._stream.readBoolean()
         else:
             self._decompress = False
 
-        if self._version >= BLOCK_COMPRESS_VERSION:
+        if self._version.to_bytes(1, byteorder="little") >= BLOCK_COMPRESS_VERSION.encode():
             self._block_compressed = self._stream.readBoolean()
         else:
             self._block_compressed = False
@@ -488,7 +489,8 @@ class Reader(object):
                 self._codec = CodecPool().getDecompressor()
 
         self._metadata = Metadata()
-        if self._version >= VERSION_WITH_METADATA:
+        #  if self._version >= VERSION_WITH_METADATA:
+        if self._version.to_bytes(1, byteorder="little") >= VERSION_WITH_METADATA.encode():
             self._metadata.readFields(self._stream)
 
         if self._version > 1:
