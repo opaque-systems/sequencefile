@@ -39,7 +39,7 @@ class Lz4Codec:
             if self.blockSize == 0:
                 return ""
 
-	trunkSize = struct.unpack('>I', io.read(4))[0]
+        trunkSize = struct.unpack('>I', io.read(4))[0]
         f = lz4_raw.decompress(io.read(trunkSize), DEFAULT_BUF_SIZE)
         self.uncompressedBytes += len(f)
         return f
