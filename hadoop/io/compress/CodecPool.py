@@ -16,10 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import sys
-sys.path.append("..")
-
-from util import ReflectionUtils
+from ...util import ReflectionUtils
 
 from .BZip2Codec import *
 from .ZlibCodec import *
