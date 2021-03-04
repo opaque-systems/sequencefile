@@ -18,7 +18,7 @@
 
 import gzip
 
-from hadoop.io.InputStream import DataInputBuffer
+from ..InputStream import DataInputBuffer
 from io import StringIO
 
 class GzipCodec:

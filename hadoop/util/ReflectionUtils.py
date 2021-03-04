@@ -16,7 +16,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from hadoop.io import *
+import sys
+sys.path.append("..")
+
+from io import *
 
 def hadoopClassFromName(class_path):
     if class_path.startswith('org.apache.hadoop.'):

@@ -17,8 +17,7 @@
 # limitations under the License.
 
 import zlib
-
-from hadoop.io.InputStream import DataInputBuffer
+from ..InputStream import DataInputBuffer
 
 class ZlibCodec:
     def compress(self, data):
