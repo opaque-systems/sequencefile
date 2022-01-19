@@ -27,6 +27,7 @@ from . import SetFile
 from .Writable import *
 from .IntWritable import *
 from .BytesWritable import *
+from .NullWritable import *
 from .Text import *
 from . import WritableUtils
 
