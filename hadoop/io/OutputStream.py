@@ -53,6 +53,24 @@ class FileOutputStream(OutputStream):
     def write(self, value):
         return self._fd.write(value)
 
+
+class BytesOutputStream(OutputStream):
+    def __init__(self, buffer):
+        self._buffer = buffer
+
+    def close(self):
+        pass
+
+    def getPos(self):
+        return len(self._buffer)
+
+    def writeByte(self, value):
+        self._buffer.extend(value)
+
+    def write(self, value):
+        self._buffer.extend(value)
+
+
 class DataOutputStream(object):
     def __init__(self, output_stream):
         assert isinstance(output_stream, OutputStream)
