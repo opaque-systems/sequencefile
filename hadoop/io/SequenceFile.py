@@ -32,7 +32,7 @@ from .compress import CodecPool
 
 from .WritableUtils import readVInt, writeVInt
 from .Writable import Writable
-from .OutputStream import FileOutputStream, DataOutputStream, DataOutputBuffer
+from .OutputStream import BytesOutputStream, FileOutputStream, DataOutputStream, DataOutputBuffer
 from .InputStream import FileInputStream, DataInputStream, DataInputBuffer
 from .VersionMismatchException import VersionMismatchException, VersionPrefixException
 
@@ -102,7 +102,7 @@ class Metadata(Writable):
             value = Text.readString(data_input)
             self._meta[key] = value
 
-def createWriter(path, key_class, value_class, metadata=None, compression_type=CompressionType.NONE):
+def createWriter(buffer, key_class, value_class, metadata=None, compression_type=CompressionType.NONE):
     kwargs = {}
 
     if compression_type == CompressionType.NONE:
@@ -115,7 +115,7 @@ def createWriter(path, key_class, value_class, metadata=None, compression_type=C
     else:
         raise NotImplementedError("Compression Type Not Supported")
 
-    return Writer(path, key_class, value_class, metadata, **kwargs)
+    return Writer(buffer, key_class, value_class, metadata, **kwargs)
 
 def createRecordWriter(path, key_class, value_class, metadata=None):
     return Writer(path, key_class, value_class, metadata, compress=True)
@@ -126,9 +126,7 @@ def createBlockWriter(path, key_class, value_class, metadata=None):
 class Writer(object):
     COMPRESSION_BLOCK_SIZE = 1000000
 
-    def __init__(self, path, key_class, value_class, metadata, compress=False, block_compress=False):
-        if os.path.exists(path):
-            raise IOError("File %s already exists." % path)
+    def __init__(self, buffer, key_class, value_class, metadata, compress=False, block_compress=False):
 
         self._key_class = key_class
         self._value_class = value_class
@@ -147,7 +145,14 @@ class Writer(object):
         self._last_sync = 0
         self._block = None
 
-        self._stream = DataOutputStream(FileOutputStream(path))
+        if type(buffer) is str: # `buffer` is the path to a file
+            if os.buffer.exists(buffer):
+                raise IOError("File %s already exists." % buffer)
+            self._stream = DataOutputStream(FileOutputStream(buffer))
+        elif type(buffer) is bytearray: # `buffer` is a bytearray
+            self._stream = DataOutputStream(BytesOutputStream(buffer))
+        else:
+            raise Exception(f"Buffer type must be str or bytearray got: {type(buffer)}")
 
         # sync is 16 random bytes
         self._sync = md5(('%s@%d' % (uuid1().bytes, int(time() * 1000))).encode("utf-8")).digest()
