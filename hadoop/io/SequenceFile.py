@@ -146,7 +146,7 @@ class Writer(object):
         self._block = None
 
         if type(buffer) is str: # `buffer` is the path to a file
-            if os.buffer.exists(buffer):
+            if os.path.exists(buffer):
                 raise IOError("File %s already exists." % buffer)
             self._stream = DataOutputStream(FileOutputStream(buffer))
         elif type(buffer) is bytearray: # `buffer` is a bytearray
