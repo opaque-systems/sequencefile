@@ -64,8 +64,14 @@ class ByteArrayInputStream(InputStream):
         self._offset = offset
         self._count = length
 
+    def length(self):
+        return self._count
+
     def close(self):
         pass
+
+    def getPos(self):
+        return self._offset
 
     def flush(self):
         pass

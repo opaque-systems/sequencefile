@@ -297,8 +297,11 @@ class Reader(object):
         self._record = DataInputBuffer()
         self._initialize(path, start, length)
 
-    def getStream(self, path):
-        return DataInputStream(FileInputStream(path))
+    def getStream(self, inp):
+        if type(inp) == str:
+            return DataInputStream(FileInputStream(inp))
+        elif type(inp) == bytes:
+            return DataInputBuffer(inp)
 
     def close(self):
         self._stream.close()
@@ -408,6 +411,24 @@ class Reader(object):
         if more:
             self._getCurrentValue(value)
         return more
+
+    def nextSQLValue(self, key):
+        # Attempt to get the key for the next value
+        more = self.nextKey(key)
+        if not more:
+            raise Exception(
+                "Attempted to get value from SeqeunceFile, but no values are remaining"
+            )
+
+        # Get a reference to the next value
+        stream = self.nextRawValue()
+
+        # The first value in the stream will be the total value size: read and discard
+        # this
+        stream.readInt()
+
+        # Return the remaining buffer
+        return stream.toByteArray()
 
     def seek(self, position):
         self._stream.seek(position)
