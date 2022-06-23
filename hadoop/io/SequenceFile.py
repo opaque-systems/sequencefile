@@ -416,9 +416,7 @@ class Reader(object):
         # Attempt to get the key for the next value
         more = self.nextKey(key)
         if not more:
-            raise Exception(
-                "Attempted to get value from SeqeunceFile, but no values are remaining"
-            )
+            return None
 
         # Get a reference to the next value
         stream = self.nextRawValue()
