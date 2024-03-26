@@ -69,26 +69,26 @@ class Metadata(Writable):
         self._meta[name] = value
 
     def keys(self):
-        return self._meta.keys()
+        return list(self._meta.keys())
 
     def iterkeys(self):
-        return self._meta.iterkeys()
+        return iter(self._meta.keys())
 
     def values(self):
-        return self._meta.values()
+        return list(self._meta.values())
 
     def itervalues(self):
-        return self._meta.itervalues()
+        return iter(self._meta.values())
 
     def iteritems(self):
-        return self._meta.iteritems()
+        return iter(self._meta.items())
 
     def __iter__(self):
-        return self._meta.iteritems()
+        return iter(self._meta.items())
 
     def write(self, data_output):
         data_output.writeInt(len(self._meta))
-        for key, value in self._meta.items():
+        for key, value in list(self._meta.items()):
             Text.writeString(data_output, key)
             Text.writeString(data_output, value)
 
@@ -505,7 +505,7 @@ class Reader(object):
 
         # setup compression codec
         if self._decompress:
-            if self._version >= CUSTOM_COMPRESS_VERSION:
+            if self._version.to_bytes(1, byteorder="little") >= CUSTOM_COMPRESS_VERSION.encode():
                 codec_class = Text.readString(self._stream)
                 self._codec = CodecPool().getDecompressor(codec_class)
             else:
