@@ -25,10 +25,10 @@ def writeData(writer):
     key = LongWritable()
     value = LongWritable()
 
-    for i in xrange(10):
+    for i in range(10):
         key.set(1000 - i)
         value.set(i)
-        print '[%d] %s %s' % (writer.getLength(), key.toString(), value.toString())
+        print('[%d] %s %s' % (writer.getLength(), key.toString(), value.toString()))
         writer.append(key, value)
 
 def testWrite(filename):
@@ -45,7 +45,7 @@ def testRead(filename):
 
     metadata = reader.getMetadata()
     for meta_key, meta_value in metadata:
-        print 'METADATA:', meta_key, meta_value
+        print('METADATA:', meta_key, meta_value)
 
     key_class = reader.getKeyClass()
     value_class = reader.getValueClass()
@@ -55,8 +55,8 @@ def testRead(filename):
 
     position = reader.getPosition()
     while reader.next(key, value):
-        print '*' if reader.syncSeen() else ' ',
-        print '[%6s] %6s %6s' % (position, key.toString(), value.toString())
+        print('*' if reader.syncSeen() else ' ', end=' ')
+        print('[%6s] %6s %6s' % (position, key.toString(), value.toString()))
         position = reader.getPosition()
 
     reader.close()

@@ -26,7 +26,7 @@ def readVLong(data_input):
         return first_byte
 
     i = 0
-    for idx in xrange(length - 1):
+    for idx in range(length - 1):
         b = data_input.readUByte()
         i = i << 8
         i = i | b
@@ -53,7 +53,7 @@ def writeVLong(data_output, value):
 
     data_output.writeByte(length)
     length = -(length + 120) if (length < -120) else -(length + 112)
-    for idx in reversed(range(length)):
+    for idx in reversed(list(range(length))):
         shiftbits = idx << 3
         mask = 0xFF << shiftbits
 

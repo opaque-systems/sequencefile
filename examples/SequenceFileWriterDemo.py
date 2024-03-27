@@ -24,10 +24,10 @@ def writeData(writer):
     key = LongWritable()
     value = LongWritable()
 
-    for i in xrange(1000):
+    for i in range(1000):
         key.set(1000 - i)
         value.set(i)
-        print '[%d] %s %s' % (writer.getLength(), key.toString(), value.toString())
+        print('[%d] %s %s' % (writer.getLength(), key.toString(), value.toString()))
         writer.append(key, value)
 
 if __name__ == '__main__':

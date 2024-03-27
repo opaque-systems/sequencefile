@@ -68,7 +68,7 @@ class SequenceFileReader(pp.RecordReader):
     def close(self):
         self.seq_file.close()
 
-    def next(self):
+    def __next__(self):
         if (self.seq_file.next(self._key, self._value)):
             return (True, self._key.toString(), self._value.toString())
         else:

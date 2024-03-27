@@ -18,7 +18,7 @@
 
 import lz4_raw
 import struct
-from cStringIO import StringIO
+from io import StringIO
 
 from hadoop.io.InputStream import DataInputBuffer
 
